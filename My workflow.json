@@ -1,0 +1,94 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e4a42fa5-8c0a-4f38-bc1d-b0af77b65ae6",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data[0].b64_json",
+        "options": {
+          "fileName": "=test.jpg"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        576,
+        0
+      ],
+      "id": "eaaa6199-1831-414d-a223-f44e8d229ca6",
+      "name": "Convert to File4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://gen.pollinations.ai/v1/images/generations",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR API"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"prompt\": \"a futuristic city at sunset, ultra detailed, 4k\",\n  \"model\": \"flux\",\n  \"n\": 1,\n  \"size\": \"512x1024\",\n  \"quality\": \"medium\",\n  \"response_format\": \"b64_json\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        272,
+        0
+      ],
+      "id": "1279ac5d-680d-4c2d-83e8-30248c169a85",
+      "name": "pollinations1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "pollinations1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pollinations1": {
+      "main": [
+        [
+          {
+            "node": "Convert to File4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "",
+  "meta": {
+    "instanceId": "59c73d6f9ed4efb060fc868ce29a9729f53a32b202f711664a0e6a0953f78a68"
+  },
+  "tags": []
+}
